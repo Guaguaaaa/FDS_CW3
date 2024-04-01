@@ -71,32 +71,117 @@ var_100mi = var_100mi[var_100mi['Athlete gender'].isin(['F', 'M'])]
 
 fig, axs = plt.subplots(2, 2, figsize=(12, 10))
 
-female_data = var_50km[var_50km['Athlete gender'] == 'F']
-female_avg_performance = female_data.groupby('Year of event')['Athlete performance'].mean()
+female_data_50km = var_50km[var_50km['Athlete gender'] == 'F']
+female_avg_performance_50km = female_data_50km.groupby('Year of event')['Athlete performance'].mean()
 
-X_female = female_avg_performance.index.values.reshape(-1, 1)
-y_female = female_avg_performance.values.reshape(-1, 1)
-reg_female = LinearRegression().fit(X_female, y_female)
-reg_line_female = reg_female.predict(X_female)
+X_female_50km = female_avg_performance_50km.index.values.reshape(-1, 1)
+y_female_50km = female_avg_performance_50km.values.reshape(-1, 1)
+reg_female_50km = LinearRegression().fit(X_female_50km, y_female_50km)
+reg_line_female_50km = reg_female_50km.predict(X_female_50km)
 
-male_data = var_50km[var_50km['Athlete gender'] == 'M']
-male_avg_performance = male_data.groupby('Year of event')['Athlete performance'].mean()
+male_data_50km = var_50km[var_50km['Athlete gender'] == 'M']
+male_avg_performance_50km = male_data_50km.groupby('Year of event')['Athlete performance'].mean()
 
-X_male = male_avg_performance.index.values.reshape(-1, 1)
-y_male = male_avg_performance.values.reshape(-1, 1)
-reg_male = LinearRegression().fit(X_male, y_male)
-reg_line_male = reg_male.predict(X_male)
+X_male_50km = male_avg_performance_50km.index.values.reshape(-1, 1)
+y_male_50km = male_avg_performance_50km.values.reshape(-1, 1)
+reg_male_50km = LinearRegression().fit(X_male_50km, y_male_50km)
+reg_line_male_50km = reg_male_50km.predict(X_male_50km)
 
-axs[0, 0].plot(female_avg_performance.index, female_avg_performance.values, label='Female', marker='o')
-axs[0, 0].plot(X_female, reg_line_female, color='blue', linestyle='--', label='Female Regression')
-axs[0, 0].plot(male_avg_performance.index, male_avg_performance.values, label='Male', marker='o')
-axs[0, 0].plot(X_male, reg_line_male, color='orange', linestyle='--', label='Male Regression')
+axs[0, 0].plot(female_avg_performance_50km.index, female_avg_performance_50km.values, label='Female', marker='o')
+axs[0, 0].plot(X_female_50km, reg_line_female_50km, color='blue', linestyle='--', label='Female Regression')
+axs[0, 0].plot(male_avg_performance_50km.index, male_avg_performance_50km.values, label='Male', marker='o')
+axs[0, 0].plot(X_male_50km, reg_line_male_50km, color='orange', linestyle='--', label='Male Regression')
 
 axs[0, 0].set_xlabel('Year of Event')
 axs[0, 0].set_ylabel('Average Athlete Performance (hours)')
 axs[0, 0].set_title('Average Athlete Performance Over Years for 50km')
 
 axs[0, 0].legend()
+
+# 100km
+female_data_100km = var_100km[var_100km['Athlete gender'] == 'F']
+female_avg_performance_100km = female_data_100km.groupby('Year of event')['Athlete performance'].mean()
+
+X_female_100km = female_avg_performance_100km.index.values.reshape(-1, 1)
+y_female_100km = female_avg_performance_100km.values.reshape(-1, 1)
+reg_female_100km = LinearRegression().fit(X_female_100km, y_female_100km)
+reg_line_female_100km = reg_female_100km.predict(X_female_100km)
+
+male_data_100km = var_100km[var_100km['Athlete gender'] == 'M']
+male_avg_performance_100km = male_data_100km.groupby('Year of event')['Athlete performance'].mean()
+
+X_male_100km = male_avg_performance_100km.index.values.reshape(-1, 1)
+y_male_100km = male_avg_performance_100km.values.reshape(-1, 1)
+reg_male_100km = LinearRegression().fit(X_male_100km, y_male_100km)
+reg_line_male_100km = reg_male_100km.predict(X_male_100km)
+
+axs[0, 1].plot(female_avg_performance_100km.index, female_avg_performance_100km.values, label='Female', marker='o')
+axs[0, 1].plot(X_female_100km, reg_line_female_100km, color='blue', linestyle='--', label='Female Regression')
+axs[0, 1].plot(male_avg_performance_100km.index, male_avg_performance_100km.values, label='Male', marker='o')
+axs[0, 1].plot(X_male_100km, reg_line_male_100km, color='orange', linestyle='--', label='Male Regression')
+
+axs[0, 1].set_xlabel('Year of Event')
+axs[0, 1].set_ylabel('Average Athlete Performance (hours)')
+axs[0, 1].set_title('Average Athlete Performance Over Years for 100km')
+
+axs[0, 1].legend()
+
+# 50mi
+
+female_data_50mi = var_50mi[var_50mi['Athlete gender'] == 'F']
+female_avg_performance_50mi = female_data_50mi.groupby('Year of event')['Athlete performance'].mean()
+
+X_female_50mi = female_avg_performance_50mi.index.values.reshape(-1, 1)
+y_female_50mi = female_avg_performance_50mi.values.reshape(-1, 1)
+reg_female_50mi = LinearRegression().fit(X_female_50mi, y_female_50mi)
+reg_line_female_50mi = reg_female_50mi.predict(X_female_50mi)
+
+male_data_50mi = var_50mi[var_50mi['Athlete gender'] == 'M']
+male_avg_performance_50mi = male_data_50mi.groupby('Year of event')['Athlete performance'].mean()
+
+X_male_50mi = male_avg_performance_50mi.index.values.reshape(-1, 1)
+y_male_50mi = male_avg_performance_50mi.values.reshape(-1, 1)
+reg_male_50mi = LinearRegression().fit(X_male_50mi, y_male_50mi)
+reg_line_male_50mi = reg_male_50mi.predict(X_male_50mi)
+
+axs[1, 0].plot(female_avg_performance_50mi.index, female_avg_performance_50mi.values, label='Female', marker='o')
+axs[1, 0].plot(X_female_50mi, reg_line_female_50mi, color='blue', linestyle='--', label='Female Regression')
+axs[1, 0].plot(male_avg_performance_50mi.index, male_avg_performance_50mi.values, label='Male', marker='o')
+axs[1, 0].plot(X_male_50mi, reg_line_male_50mi, color='orange', linestyle='--', label='Male Regression')
+
+axs[1, 0].set_xlabel('Year of Event')
+axs[1, 0].set_ylabel('Average Athlete Performance (hours)')
+axs[1, 0].set_title('Average Athlete Performance Over Years for 50mi')
+
+axs[1, 0].legend()
+
+# 100mi
+female_data_100mi = var_100mi[var_100mi['Athlete gender'] == 'F']
+female_avg_performance_100mi = female_data_100mi.groupby('Year of event')['Athlete performance'].mean()
+
+X_female_100mi = female_avg_performance_100mi.index.values.reshape(-1, 1)
+y_female_100mi = female_avg_performance_100mi.values.reshape(-1, 1)
+reg_female_100mi = LinearRegression().fit(X_female_100mi, y_female_100mi)
+reg_line_female_100mi = reg_female_100mi.predict(X_female_100mi)
+
+male_data_100mi = var_100mi[var_100mi['Athlete gender'] == 'M']
+male_avg_performance_100mi = male_data_100mi.groupby('Year of event')['Athlete performance'].mean()
+
+X_male_100mi = male_avg_performance_100mi.index.values.reshape(-1, 1)
+y_male_100mi = male_avg_performance_100mi.values.reshape(-1, 1)
+reg_male_100mi = LinearRegression().fit(X_male_100mi, y_male_100mi)
+reg_line_male_100mi = reg_male_100mi.predict(X_male_100mi)
+
+axs[1, 1].plot(female_avg_performance_100mi.index, female_avg_performance_100mi.values, label='Female', marker='o')
+axs[1, 1].plot(X_female_100mi, reg_line_female_100mi, color='blue', linestyle='--', label='Female Regression')
+axs[1, 1].plot(male_avg_performance_100mi.index, male_avg_performance_100mi.values, label='Male', marker='o')
+axs[1, 1].plot(X_male_100mi, reg_line_male_100mi, color='orange', linestyle='--', label='Male Regression')
+
+axs[1, 1].set_xlabel('Year of Event')
+axs[1, 1].set_ylabel('Average Athlete Performance (hours)')
+axs[1, 1].set_title('Average Athlete Performance Over Years for 100mi')
+
+axs[1, 1].legend()
 
 plt.tight_layout()
 plt.show()
