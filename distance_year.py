@@ -45,7 +45,20 @@ df.loc[df['Event distance/length'] == '100 mi', 'Finishing Time'] = df.loc[df['E
 # print(var_50km['Finishing Time'])
 
 def duration_to_hours(duration_str):
-    pattern = r'(\d+)d\s+(\d+):(\d+):(\d+)\s+h'
+    var = 0
+    values = ""
+    if "d" in duration_str:
+        temp = duration_str.split()
+        var += int(temp[0][:-1]) * 24
+        values = duration_str.split()[1]
+    else:
+        values = duration_str.split()[0]
+
+    splitbypoint = values.split(":")
+    var += int(splitbypoint[0]) + int(splitbypoint[1]) / 60 + int(splitbypoint[2]) / 3600
+
+    return var
+    '''pattern = r'(\d+)d\s+(\d+):(\d+):(\d+)\s+h'
     match = re.match(pattern, duration_str)
 
     if match:
@@ -56,9 +69,15 @@ def duration_to_hours(duration_str):
 
         # Convert to total hours
         total_hours = days * 24 + hours + minutes / 60 + seconds / 3600
+        print(total_hours)
         return total_hours
     else:
-        return None
+        # If the pattern doesn't match, try to convert directly to float
+        try:
+            return float(duration_str)
+        except ValueError:
+            #print("in none")
+            return None'''
 
 
 var_50km = df[df['Event distance/length'] == '50km']
@@ -76,14 +95,25 @@ var_50mi = var_50mi[mask]
 mask = var_100mi['Athlete performance'].notna()
 var_100mi = var_100mi[mask]
 
+# var_50km['Athlete performance'] = var_50km['Athlete performance'].astype(str)
 var_50km['Athlete performance'] = var_50km['Athlete performance'].apply(duration_to_hours)
 var_100km['Athlete performance'] = var_100km['Athlete performance'].apply(duration_to_hours)
 var_50mi['Athlete performance'] = var_50mi['Athlete performance'].apply(duration_to_hours)
 var_100mi['Athlete performance'] = var_100mi['Athlete performance'].apply(duration_to_hours)
 
-#print(var_50km)
+#print(var_50km['Athlete performance'])
 
+average_performance = var_50km.groupby('Year of event')['Athlete performance'].mean().reset_index()
+print(average_performance)
 
+plt.figure(figsize=(10, 6))
+plt.plot(average_performance['Year of event'], average_performance['Athlete performance'], marker='o', linestyle='-')
+#plt.plot(var_50km['Year of event'], var_50km['Athlete performance'], marker='o', linestyle='-')
+plt.title('Average Athlete Performance Over Years for 50km')
+plt.xlabel('Year of Event')
+plt.ylabel('Average Athlete Performance')
+plt.grid(True)
+plt.show()
 '''fig, axs = plt.subplots(2, 2, figsize=(12, 8))
 
 # Plot for '50 km' dataset
