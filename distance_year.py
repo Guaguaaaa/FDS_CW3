@@ -68,11 +68,9 @@ fig, axs = plt.subplots(2, 2, figsize=(12, 10))
 # 50 km
 average_performance_50km = var_50km.groupby('Year of event')['Athlete performance'].mean().reset_index()
 
-# Fit a linear regression model
 slope, intercept, _, _, _ = linregress(average_performance_50km['Year of event'], average_performance_50km['Athlete performance'])
 regression_line = slope * average_performance_50km['Year of event'] + intercept
 
-# Apply k-means clustering to the data
 X = average_performance_50km[['Year of event', 'Athlete performance']]
 kmeans = KMeans(n_clusters=3, random_state=42)
 kmeans.fit(X)
@@ -92,11 +90,9 @@ axs[0, 0].legend()
 
 average_performance_100km = var_100km.groupby('Year of event')['Athlete performance'].mean().reset_index()
 
-# Fit a linear regression model
 slope, intercept, _, _, _ = linregress(average_performance_100km['Year of event'], average_performance_100km['Athlete performance'])
 regression_line = slope * average_performance_100km['Year of event'] + intercept
 
-# Apply k-means clustering to the data
 X = average_performance_100km[['Year of event', 'Athlete performance']]
 kmeans = KMeans(n_clusters=3, random_state=42)
 kmeans.fit(X)
@@ -116,11 +112,9 @@ axs[0, 1].legend()
 # 50 mi
 average_performance_50mi = var_50mi.groupby('Year of event')['Athlete performance'].mean().reset_index()
 
-# Fit a linear regression model
 slope, intercept, _, _, _ = linregress(average_performance_50mi['Year of event'], average_performance_50mi['Athlete performance'])
 regression_line = slope * average_performance_50mi['Year of event'] + intercept
 
-# Apply k-means clustering to the data
 X = average_performance_50mi[['Year of event', 'Athlete performance']]
 kmeans = KMeans(n_clusters=3, random_state=42)
 kmeans.fit(X)
@@ -139,11 +133,9 @@ axs[1, 0].legend()
 # 100 mi
 average_performance_100mi = var_100mi.groupby('Year of event')['Athlete performance'].mean().reset_index()
 
-# Fit a linear regression model
 slope, intercept, _, _, _ = linregress(average_performance_100mi['Year of event'], average_performance_100mi['Athlete performance'])
 regression_line = slope * average_performance_100mi['Year of event'] + intercept
 
-# Apply k-means clustering to the data
 X = average_performance_100mi[['Year of event', 'Athlete performance']]
 kmeans = KMeans(n_clusters=3, random_state=42)
 kmeans.fit(X)
