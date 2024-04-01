@@ -11,21 +11,20 @@ from sklearn.linear_model import LinearRegression
 
 dtypes = {
     'Year of event': 'int64',
-    'Event dates': object,  # there are 00.00.1995, or 05.-07.01.2018
+    'Event dates': object,
     'Event name': object,
     'Event distance/length': object,
     'Event number of finishers': 'int64',
     'Athlete performance': object,
     'Athlete club': object,
     'Athlete country': object,
-    'Athlete year of birth': 'float64',  # contains 1978.0 (always .0)
-    'Athlete gender': object,  # Gender: F or M or X
+    'Athlete year of birth': 'float64',
+    'Athlete gender': object,
     'Athlete age category': object,
-    'Athlete average speed': object,  # has data like '18:00:00' in it.
+    'Athlete average speed': object,
     'Athlete ID': 'int64'
 }
 
-# read file
 df = pd.read_csv("TWO_CENTURIES_OF_UM_RACES.csv", dtype=dtypes)
 
 
