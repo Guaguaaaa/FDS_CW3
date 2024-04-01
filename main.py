@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-
 dtypes = {
     'Year of event': 'int64',
     'Event dates': object,  # there are 00.00.1995, or 05.-07.01.2018
