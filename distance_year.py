@@ -4,6 +4,8 @@ import re
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy.stats import linregress
+from sklearn.cluster import KMeans
 
 
 dtypes = {
@@ -27,23 +29,6 @@ dtypes = {
 # 读取CSV文件
 df = pd.read_csv("TWO_CENTURIES_OF_UM_RACES.csv", dtype=dtypes)
 
-"""mi_to_km = 1.60934
-var_50km['Finishing Time'] = None  # Initialize the column
-var_50km['Athlete average speed'] = var_50km['Athlete average speed'].astype(float)
-
-# df.loc[df['Event distance/length'] == '50 km', 'Finishing Time'] = df.loc[df['Event distance/length'] == '50 km', 'Athlete average speed'].apply(lambda speed: 50 / speed)
-
-# For 100 km dataset
-df.loc[df['Event distance/length'] == '100 km', 'Finishing Time'] = df.loc[df['Event distance/length'] == '100 km', 'Athlete average speed'].apply(lambda speed: 100 / speed)
-
-# For 50 mi dataset
-df.loc[df['Event distance/length'] == '50 mi', 'Finishing Time'] = df.loc[df['Event distance/length'] == '50 mi', 'Athlete average speed'].apply(lambda speed: 50 * mi_to_km / speed)
-
-# For 100 mi dataset
-df.loc[df['Event distance/length'] == '100 mi', 'Finishing Time'] = df.loc[df['Event distance/length'] == '100 mi', 'Athlete average speed'].apply(lambda speed: 100 * mi_to_km / speed)"""
-
-# print(var_50km['Finishing Time'])
-
 def duration_to_hours(duration_str):
     var = 0
     values = ""
@@ -58,26 +43,6 @@ def duration_to_hours(duration_str):
     var += int(splitbypoint[0]) + int(splitbypoint[1]) / 60 + int(splitbypoint[2]) / 3600
 
     return var
-    '''pattern = r'(\d+)d\s+(\d+):(\d+):(\d+)\s+h'
-    match = re.match(pattern, duration_str)
-
-    if match:
-        days = int(match.group(1)) if match.group(1) else 0
-        hours = int(match.group(2))
-        minutes = int(match.group(3))
-        seconds = int(match.group(4))
-
-        # Convert to total hours
-        total_hours = days * 24 + hours + minutes / 60 + seconds / 3600
-        print(total_hours)
-        return total_hours
-    else:
-        # If the pattern doesn't match, try to convert directly to float
-        try:
-            return float(duration_str)
-        except ValueError:
-            #print("in none")
-            return None'''
 
 
 var_50km = df[df['Event distance/length'] == '50km']
@@ -104,45 +69,33 @@ var_100mi['Athlete performance'] = var_100mi['Athlete performance'].apply(durati
 #print(var_50km['Athlete performance'])
 
 average_performance = var_50km.groupby('Year of event')['Athlete performance'].mean().reset_index()
-print(average_performance)
 
+# Fit a linear regression model
+slope, intercept, _, _, _ = linregress(average_performance['Year of event'], average_performance['Athlete performance'])
+regression_line = slope * average_performance['Year of event'] + intercept
+
+# Apply k-means clustering to the data
+X = average_performance[['Year of event', 'Athlete performance']]
+kmeans = KMeans(n_clusters=3, random_state=42)
+kmeans.fit(X)
+cluster_centers = kmeans.cluster_centers_
+labels = kmeans.labels_
+
+# Plot
 plt.figure(figsize=(10, 6))
-plt.plot(average_performance['Year of event'], average_performance['Athlete performance'], marker='o', linestyle='-')
-#plt.plot(var_50km['Year of event'], var_50km['Athlete performance'], marker='o', linestyle='-')
-plt.title('Average Athlete Performance Over Years for 50km')
+
+# Plot data points
+plt.scatter(average_performance['Year of event'], average_performance['Athlete performance'], c=labels, cmap='viridis', label='Data')
+
+# Plot cluster centers
+plt.scatter(cluster_centers[:, 0], cluster_centers[:, 1], marker='X', s=100, color='red', label='Cluster Centers')
+
+# Plot regression line
+plt.plot(average_performance['Year of event'], regression_line, color='black', linestyle='-', label='Regression Line')
+
+plt.title('Average Athlete Performance Over Years for 50km with K-Means Clustering')
 plt.xlabel('Year of Event')
 plt.ylabel('Average Athlete Performance')
+plt.legend()
 plt.grid(True)
 plt.show()
-'''fig, axs = plt.subplots(2, 2, figsize=(12, 8))
-
-# Plot for '50 km' dataset
-axs[0, 0].plot(var_50km['Year of event'], var_50km['Athlete performance'], marker='o', linestyle='-')
-axs[0, 0].set_title('50 km')
-axs[0, 0].set_xlabel('Year of Event')
-axs[0, 0].set_ylabel('Athlete Performance (hours)')
-
-# Plot for '100 km' dataset
-axs[0, 1].plot(var_100km['Year of event'], var_100km['Athlete performance'], marker='o', linestyle='-')
-axs[0, 1].set_title('100 km')
-axs[0, 1].set_xlabel('Year of Event')
-axs[0, 1].set_ylabel('Athlete Performance (hours)')
-
-# Plot for '50 mi' dataset
-axs[1, 0].plot(var_50mi['Year of event'], var_50mi['Athlete performance'], marker='o', linestyle='-')
-axs[1, 0].set_title('50 mi')
-axs[1, 0].set_xlabel('Year of Event')
-axs[1, 0].set_ylabel('Athlete Performance (hours)')
-
-# Plot for '100 mi' dataset
-axs[1, 1].plot(var_100mi['Year of event'], var_100mi['Athlete performance'], marker='o', linestyle='-')
-axs[1, 1].set_title('100 mi')
-axs[1, 1].set_xlabel('Year of Event')
-axs[1, 1].set_ylabel('Athlete Performance (hours)')
-
-# Adjust layout
-plt.tight_layout()
-
-# Show plot
-plt.show()
-'''
