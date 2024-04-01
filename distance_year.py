@@ -24,10 +24,9 @@ dtypes = {
     'Athlete ID': 'int64'
 }
 
-# 路程/速度=时间
-
-# 读取CSV文件
+# read file
 df = pd.read_csv("TWO_CENTURIES_OF_UM_RACES.csv", dtype=dtypes)
+
 
 def duration_to_hours(duration_str):
     var = 0
@@ -52,7 +51,6 @@ var_100mi = df[df['Event distance/length'] == '100mi']
 
 mask = var_50km['Athlete performance'].notna()
 var_50km = var_50km[mask]
-
 mask = var_100km['Athlete performance'].notna()
 var_100km = var_100km[mask]
 mask = var_50mi['Athlete performance'].notna()
@@ -60,42 +58,107 @@ var_50mi = var_50mi[mask]
 mask = var_100mi['Athlete performance'].notna()
 var_100mi = var_100mi[mask]
 
-# var_50km['Athlete performance'] = var_50km['Athlete performance'].astype(str)
 var_50km['Athlete performance'] = var_50km['Athlete performance'].apply(duration_to_hours)
 var_100km['Athlete performance'] = var_100km['Athlete performance'].apply(duration_to_hours)
 var_50mi['Athlete performance'] = var_50mi['Athlete performance'].apply(duration_to_hours)
 var_100mi['Athlete performance'] = var_100mi['Athlete performance'].apply(duration_to_hours)
 
-#print(var_50km['Athlete performance'])
+# Plot
+fig, axs = plt.subplots(2, 2, figsize=(12, 10))
 
-average_performance = var_50km.groupby('Year of event')['Athlete performance'].mean().reset_index()
+# 50 km
+average_performance_50km = var_50km.groupby('Year of event')['Athlete performance'].mean().reset_index()
 
 # Fit a linear regression model
-slope, intercept, _, _, _ = linregress(average_performance['Year of event'], average_performance['Athlete performance'])
-regression_line = slope * average_performance['Year of event'] + intercept
+slope, intercept, _, _, _ = linregress(average_performance_50km['Year of event'], average_performance_50km['Athlete performance'])
+regression_line = slope * average_performance_50km['Year of event'] + intercept
 
 # Apply k-means clustering to the data
-X = average_performance[['Year of event', 'Athlete performance']]
+X = average_performance_50km[['Year of event', 'Athlete performance']]
 kmeans = KMeans(n_clusters=3, random_state=42)
 kmeans.fit(X)
 cluster_centers = kmeans.cluster_centers_
 labels = kmeans.labels_
 
-# Plot
-plt.figure(figsize=(10, 6))
 
-# Plot data points
-plt.scatter(average_performance['Year of event'], average_performance['Athlete performance'], c=labels, cmap='viridis', label='Data')
+axs[0, 0].scatter(average_performance_50km['Year of event'], average_performance_50km['Athlete performance'], c=labels, cmap='viridis', label='Data')
+axs[0, 0].scatter(cluster_centers[:, 0], cluster_centers[:, 1], marker='X', s=100, color='red', label='Cluster Centers')
+axs[0, 0].plot(average_performance_50km['Year of event'], regression_line, color='black', linestyle='-', label='Regression Line')
+axs[0, 0].set_title('K-Means Clustering for 50 km')
+axs[0, 0].set_xlabel('Year of Event')
+axs[0, 0].set_ylabel('Average Athlete Performance')
+axs[0, 0].legend()
 
-# Plot cluster centers
-plt.scatter(cluster_centers[:, 0], cluster_centers[:, 1], marker='X', s=100, color='red', label='Cluster Centers')
+# 100 km
 
-# Plot regression line
-plt.plot(average_performance['Year of event'], regression_line, color='black', linestyle='-', label='Regression Line')
+average_performance_100km = var_100km.groupby('Year of event')['Athlete performance'].mean().reset_index()
 
-plt.title('Average Athlete Performance Over Years for 50km with K-Means Clustering')
-plt.xlabel('Year of Event')
-plt.ylabel('Average Athlete Performance')
-plt.legend()
-plt.grid(True)
+# Fit a linear regression model
+slope, intercept, _, _, _ = linregress(average_performance_100km['Year of event'], average_performance_100km['Athlete performance'])
+regression_line = slope * average_performance_100km['Year of event'] + intercept
+
+# Apply k-means clustering to the data
+X = average_performance_100km[['Year of event', 'Athlete performance']]
+kmeans = KMeans(n_clusters=3, random_state=42)
+kmeans.fit(X)
+cluster_centers = kmeans.cluster_centers_
+labels = kmeans.labels_
+
+
+axs[0, 1].scatter(average_performance_100km['Year of event'], average_performance_100km['Athlete performance'], c=labels, cmap='viridis', label='Data')
+axs[0, 1].scatter(cluster_centers[:, 0], cluster_centers[:, 1], marker='X', s=100, color='red', label='Cluster Centers')
+axs[0, 1].plot(average_performance_100km['Year of event'], regression_line, color='black', linestyle='-', label='Regression Line')
+axs[0, 1].set_title('K-Means Clustering for 100 km')
+axs[0, 1].set_xlabel('Year of Event')
+axs[0, 1].set_ylabel('Average Athlete Performance')
+axs[0, 1].legend()
+
+
+# 50 mi
+average_performance_50mi = var_50mi.groupby('Year of event')['Athlete performance'].mean().reset_index()
+
+# Fit a linear regression model
+slope, intercept, _, _, _ = linregress(average_performance_50mi['Year of event'], average_performance_50mi['Athlete performance'])
+regression_line = slope * average_performance_50mi['Year of event'] + intercept
+
+# Apply k-means clustering to the data
+X = average_performance_50mi[['Year of event', 'Athlete performance']]
+kmeans = KMeans(n_clusters=3, random_state=42)
+kmeans.fit(X)
+cluster_centers = kmeans.cluster_centers_
+labels = kmeans.labels_
+
+
+axs[1, 0].scatter(average_performance_50mi['Year of event'], average_performance_50mi['Athlete performance'], c=labels, cmap='viridis', label='Data')
+axs[1, 0].scatter(cluster_centers[:, 0], cluster_centers[:, 1], marker='X', s=100, color='red', label='Cluster Centers')
+axs[1, 0].plot(average_performance_50mi['Year of event'], regression_line, color='black', linestyle='-', label='Regression Line')
+axs[1, 0].set_title('K-Means Clustering for 50 mi')
+axs[1, 0].set_xlabel('Year of Event')
+axs[1, 0].set_ylabel('Average Athlete Performance')
+axs[1, 0].legend()
+
+# 100 mi
+average_performance_100mi = var_100mi.groupby('Year of event')['Athlete performance'].mean().reset_index()
+
+# Fit a linear regression model
+slope, intercept, _, _, _ = linregress(average_performance_100mi['Year of event'], average_performance_100mi['Athlete performance'])
+regression_line = slope * average_performance_100mi['Year of event'] + intercept
+
+# Apply k-means clustering to the data
+X = average_performance_100mi[['Year of event', 'Athlete performance']]
+kmeans = KMeans(n_clusters=3, random_state=42)
+kmeans.fit(X)
+cluster_centers = kmeans.cluster_centers_
+labels = kmeans.labels_
+
+
+axs[1, 1].scatter(average_performance_100mi['Year of event'], average_performance_100mi['Athlete performance'], c=labels, cmap='viridis', label='Data')
+axs[1, 1].scatter(cluster_centers[:, 0], cluster_centers[:, 1], marker='X', s=100, color='red', label='Cluster Centers')
+axs[1, 1].plot(average_performance_100mi['Year of event'], regression_line, color='black', linestyle='-', label='Regression Line')
+axs[1, 1].set_title('K-Means Clustering for 100 mi')
+axs[1, 1].set_xlabel('Year of Event')
+axs[1, 1].set_ylabel('Average Athlete Performance')
+axs[1, 1].legend()
+
+plt.tight_layout()
 plt.show()
