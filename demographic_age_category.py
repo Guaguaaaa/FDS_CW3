@@ -1,20 +1,6 @@
-import numpy as np
-import re
-
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
-from scipy.stats import linregress
-from sklearn.cluster import KMeans
 from sklearn.linear_model import LinearRegression
-
-
-"""
-U23
-23-35
-35-45
-A45
-"""
 
 dtypes = {
     'Year of event': 'int64',

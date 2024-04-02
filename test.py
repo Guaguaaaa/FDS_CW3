@@ -3,7 +3,6 @@ import pandas as pd
 def filter(column_name, filter_symbol, contain, df):
     mask = df[column_name].notna()
 
-    # 使用掩码操作筛选数据
     df = df[mask]
 
     if contain == 1:
@@ -19,7 +18,6 @@ def filter(column_name, filter_symbol, contain, df):
 def testing(df):
     column_name = 'Athlete year of birth'
     filter_symbol = ".0"
-    # Filter out non-numeric values and print them
     df = df[~df[column_name].astype(str).str.match(r'^\d{4}$')][column_name]
     df = df[~df[column_name].str.contains(filter_symbol)][column_name]
 
@@ -38,7 +36,6 @@ if __name__ == '__main__':
     var_50km = df[df['Event distance/length'] == '50km']
     mask = var_50km[column].notna()
 
-    # 使用掩码操作筛选数据
     var_50km = var_50km[mask]
 
     var_50km[column] = var_50km[column].astype(str)

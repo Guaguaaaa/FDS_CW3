@@ -1,6 +1,5 @@
 import pandas as pd
 
-# Cleaning the data to prepare for the regression model
 
 dtypes = {
     'Year of event': 'int64',
@@ -65,7 +64,6 @@ var_50km['Event_100km'] = (var_50km['Event distance/length'] == '100km').astype(
 var_50km['Event_50miles'] = (var_50km['Event distance/length'] == '50mi').astype(int)
 var_50km['Event_100miles'] = (var_50km['Event distance/length'] == '100mi').astype(int)
 var_50km = var_50km.drop(columns=['Event distance/length'])
-# Dropping the 'Event distance/length' column
 
 var_50km = var_50km.drop(columns=['Athlete average speed'])
 

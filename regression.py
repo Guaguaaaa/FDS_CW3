@@ -1,9 +1,7 @@
 import pandas as pd
-import numpy as np
-from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.linear_model import LinearRegression
 
 csv_file_path = 'modified_csv_file.csv'
-# Load the Excel file
 df = pd.read_csv(csv_file_path)
 X = df.drop(columns=['Athlete performance']).to_numpy(copy=True)
 y = df['Athlete performance'].to_numpy()
